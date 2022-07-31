@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>动物识别</title>
+</head>
+<body>
+
+<form method="post" enctype="multipart/form-data">
+    <div>
+        请选择图片 <input name="image" type="file" accept="image/*">
+    </div>
+    <div>
+        <button>提交</button>
+    </div>
+</form>
+
+<script>
+    const form = document.getElementsByName('form')[0]
+    const host = window.location.hostname
+    form.action = 'http://' + host + ':8080/algo/animal'
+</script>
+
+</body>
+</html>

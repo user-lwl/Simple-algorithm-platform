@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>算法平台</title>
+    <style>
+        #error {
+            color: red;
+            border: 1px solid blue;
+            padding: 10px;
+            display: none;
+        }
+
+        #algos {
+
+        }
+
+        .name {
+            margin-right: 10px;
+        }
+
+        .note {
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+<ul id="algos">
+
+</ul>
+<div id="error">
+    <h2>错误信息</h2>
+    <div id="error-message"></div>
+</div>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    // 用于展示错误信息的div
+    const errorDiv = document.getElementById('error')
+    const errorMessageDiv = document.getElementById('error-message')
+    // 用于展示算法列表的ul
+    const algosUl = document.getElementById('algos')
+
+    // const isDev = false
+    // const host = isDev ? '127.0.0.1' : '192.168.126.128'
+
+    const host = window.location.hostname
+
+    axios
+        .get('http://' + host + ':8080/algo/list')
+        .then(resp => { // 请求成功，成功拿到服务器返回的算法列表数据
+            for (const algo of resp.data){
+                // 遍历到一个算法对象，就创建一个li
+                const li = document.createElement('li')
+                algosUl.append(li)
+
+                // 算法名称
+                const nameSpan = document.createElement('sapn')
+                nameSpan.className = 'name'
+                li.append(nameSpan)
+
+                const nameA = document.createElement('a')
+                nameA.innerHTML = algo.name
+                nameA.href = algo.uri
+                nameA.target = '_blank'
+                nameSpan.append(nameA)
+
+
+                // 算法备注
+                const noteSpan = document.createElement('sapn')
+                noteSpan.className = 'note'
+                noteSpan.innerHTML = algo.note
+                li.append(noteSpan)
+            }
+        })
+        .catch(err => { // 请求失败
+            //让错误信息显示出来
+            errorDiv.style.display = 'block'
+            errorMessageDiv.innerHTML = err.message
+        })
+</script>
+</body>
+</html>
